@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import './App.scss';
+import Button from './components/button/Button.component';
+import Header from './components/header/Header.component';
+import List from './components/list/List.component';
+import TextInput from './components/text-input/TextInput.component';
+import { ListItem } from './library/Item';
 
-function App() {
+export default function App() {
+  const [inputValue, setInputValue] = useState('');
+  const [items, setItems] = useState<ListItem[]>([]);
+
+  const onClickCreate = () => {
+    console.log('click create', inputValue);
+    setInputValue('');
+    setItems([...items, { value: inputValue, isDone: false }]);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <div className="body">
+        <div className="body-container">
+          <div className="create-item-container">
+            <TextInput
+              placeholder="Adicione uma nova tarefa"
+              onValueChange={handleInputChange}
+              value={inputValue}
+            />
+            <Button
+              text="Criar"
+              onClick={onClickCreate}
+              isDisabled={inputValue.length === 0}
+            />
+          </div>
+          <List items={items} />
+        </div>
+      </div>
     </div>
   );
 }
-
-export default App;
