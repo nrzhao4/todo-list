@@ -1,15 +1,24 @@
+import { ReactComponent as DeleteIcon } from '../../assets/icons/delete.svg';
+import { ListItem } from '../../library/Item';
+import Checkbox from '../checkbox/Checkbox.component';
 import './Item.component.scss';
 
 type ItemProps = {
-  value: string;
-  isDone: boolean;
+  item: ListItem;
+  onClickDelete: () => void;
+  onClickCheck: () => void;
 };
 
-export default function Button({ value, isDone }: ItemProps) {
+export default function Button({
+  item,
+  onClickDelete,
+  onClickCheck,
+}: ItemProps) {
   return (
     <div className="item">
-      <input type="radio" />
-      <span>{value}</span>
+      <Checkbox isChecked={item.isDone} onClick={onClickCheck} />
+      <span className={item.isDone ? 'checked' : ''}>{item.value}</span>
+      <DeleteIcon className="delete-icon" onClick={onClickDelete} />
     </div>
   );
 }

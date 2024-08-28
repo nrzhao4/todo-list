@@ -4,4 +4,19 @@
   padding: 1rem;
   border: 1px solid var(--gray-400);
   color: var(--gray-100);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  span {
+    flex-grow: 1;
+    &.checked {
+      color: var(--gray-300);
+      text-decoration: line-through;
+    }
+  }
+}
+
+.delete-icon {
+  cursor: pointer;
 }

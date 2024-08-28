@@ -13,11 +13,26 @@ export default function App() {
   const onClickCreate = () => {
     console.log('click create', inputValue);
     setInputValue('');
-    setItems([...items, { value: inputValue, isDone: false }]);
+    setItems([{ value: inputValue, isDone: false }, ...items]);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
+  };
+
+  const deleteItem = (deletedItem: ListItem) => {
+    console.log('delete item', deletedItem);
+    const newItems = items.filter((item) => item.value !== deletedItem.value);
+    setItems(newItems);
+  };
+
+  const checkItem = (checkedItem: ListItem) => {
+    const newItems = items.filter((item) => item.value !== checkedItem.value);
+
+    newItems.push({ value: checkedItem.value, isDone: !checkedItem.isDone });
+
+    console.log('newitems: ', newItems);
+    setItems(newItems);
   };
 
   return (
@@ -37,7 +52,11 @@ export default function App() {
               isDisabled={inputValue.length === 0}
             />
           </div>
-          <List items={items} />
+          <List
+            items={items}
+            onDeleteItem={deleteItem}
+            onCheckItem={checkItem}
+          />
         </div>
       </div>
     </div>

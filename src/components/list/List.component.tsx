@@ -4,9 +4,15 @@ import './List.component.scss';
 
 type ListProps = {
   items: ListItem[];
+  onDeleteItem: (deletedItem: ListItem) => void;
+  onCheckItem: (item: ListItem) => void;
 };
 
-export default function Button({ items }: ListProps) {
+export default function Button({
+  items,
+  onDeleteItem,
+  onCheckItem,
+}: ListProps) {
   return (
     <div className="list-container">
       <div className="list-header">
@@ -22,7 +28,12 @@ export default function Button({ items }: ListProps) {
       </div>
       <div className="list-items">
         {items.map((item, index) => (
-          <Item value={item.value} isDone={item.isDone} key={index} />
+          <Item
+            item={item}
+            key={index}
+            onClickDelete={() => onDeleteItem(item)}
+            onClickCheck={() => onCheckItem(item)}
+          />
         ))}
       </div>
     </div>

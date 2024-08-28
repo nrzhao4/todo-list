@@ -13,6 +13,8 @@
   div {
     display: flex;
     gap: 0.5rem;
+    align-items: flex-end;
+
     .items-created-label {
       color: var(--blue);
     }
