@@ -8,7 +8,7 @@ type CheckboxProps = {
 export default function Button({ isChecked, onClick }: CheckboxProps) {
   return (
     <div className="container">
-      <input type="checkbox" defaultChecked={isChecked} />
+      <input readOnly type="checkbox" checked={isChecked} />
       <span className="checkmark" onClick={onClick}></span>
     </div>
   );

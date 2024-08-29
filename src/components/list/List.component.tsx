@@ -1,4 +1,4 @@
-import { ListItem } from '../../library/Item';
+import { ListItem } from '../../library/ListItem';
 import Item from '../item/Item.component';
 import './List.component.scss';
 
@@ -13,6 +13,10 @@ export default function Button({
   onDeleteItem,
   onCheckItem,
 }: ListProps) {
+  const getNumberOfDoneItems = () => {
+    return items.filter((item) => item.isDone).length;
+  };
+
   return (
     <div className="list-container">
       <div className="list-header">
@@ -24,6 +28,11 @@ export default function Button({
         </div>
         <div>
           <span className="concluded-label">Concluídas</span>
+          <div className="number-badge">
+            <span>
+              {getNumberOfDoneItems()} de {items.length}
+            </span>
+          </div>
         </div>
       </div>
       <div className="list-items">

@@ -4,16 +4,20 @@ import Button from './components/button/Button.component';
 import Header from './components/header/Header.component';
 import List from './components/list/List.component';
 import TextInput from './components/text-input/TextInput.component';
-import { ListItem } from './library/Item';
+import { ListItem } from './library/ListItem';
 
 export default function App() {
   const [inputValue, setInputValue] = useState('');
   const [items, setItems] = useState<ListItem[]>([]);
 
   const onClickCreate = () => {
-    console.log('click create', inputValue);
     setInputValue('');
-    setItems([{ value: inputValue, isDone: false }, ...items]);
+    const newItem = {
+      id: new Date().getTime(),
+      value: inputValue,
+      isDone: false,
+    };
+    setItems([newItem, ...items]);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,17 +25,17 @@ export default function App() {
   };
 
   const deleteItem = (deletedItem: ListItem) => {
-    console.log('delete item', deletedItem);
-    const newItems = items.filter((item) => item.value !== deletedItem.value);
+    const newItems = items.filter((item) => item.id !== deletedItem.id);
     setItems(newItems);
   };
 
   const checkItem = (checkedItem: ListItem) => {
-    const newItems = items.filter((item) => item.value !== checkedItem.value);
-
-    newItems.push({ value: checkedItem.value, isDone: !checkedItem.isDone });
-
-    console.log('newitems: ', newItems);
+    const newItems = items.filter((item) => item.id !== checkedItem.id);
+    newItems.push({
+      id: checkedItem.id,
+      value: checkedItem.value,
+      isDone: !checkedItem.isDone,
+    });
     setItems(newItems);
   };
 
@@ -45,6 +49,7 @@ export default function App() {
               placeholder="Adicione uma nova tarefa"
               onValueChange={handleInputChange}
               value={inputValue}
+              onEnterPress={onClickCreate}
             />
             <Button
               text="Criar"

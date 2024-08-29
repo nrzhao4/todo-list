@@ -1,5 +1,5 @@
 import { ReactComponent as DeleteIcon } from '../../assets/icons/delete.svg';
-import { ListItem } from '../../library/Item';
+import { ListItem } from '../../library/ListItem';
 import Checkbox from '../checkbox/Checkbox.component';
 import './Item.component.scss';
 
