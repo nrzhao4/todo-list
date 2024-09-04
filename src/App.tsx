@@ -17,7 +17,23 @@ export default function App() {
       value: inputValue,
       isDone: false,
     };
-    setItems([newItem, ...items]);
+    const newItemsArr = insertNewItem(newItem);
+    setItems(newItemsArr);
+  };
+
+  const insertNewItem = (newItem: ListItem) => {
+    const currentItems = items;
+    const insertIndex = currentItems.findIndex((item) => item.isDone);
+
+    if (insertIndex === -1) {
+      return [...currentItems, newItem];
+    }
+
+    return [
+      ...currentItems.slice(0, insertIndex),
+      newItem,
+      ...currentItems.slice(insertIndex),
+    ];
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

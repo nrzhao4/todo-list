@@ -1,4 +1,6 @@
+import { ReactComponent as Clipboard } from '../../assets/clipboard.svg';
 import { ListItem } from '../../library/ListItem';
+
 import Item from '../item/Item.component';
 import './List.component.scss';
 
@@ -35,16 +37,24 @@ export default function Button({
           </div>
         </div>
       </div>
-      <div className="list-items">
-        {items.map((item, index) => (
-          <Item
-            item={item}
-            key={index}
-            onClickDelete={() => onDeleteItem(item)}
-            onClickCheck={() => onCheckItem(item)}
-          />
-        ))}
-      </div>
+      {items.length === 0 ? (
+        <div className="empty-list-message">
+          <Clipboard />
+          <h3>Você ainda não tem tarefas cadastradas</h3>
+          <p>Crie tarefas e organize seus itens a fazer</p>
+        </div>
+      ) : (
+        <div className="list-items">
+          {items.map((item, index) => (
+            <Item
+              item={item}
+              key={index}
+              onClickDelete={() => onDeleteItem(item)}
+              onClickCheck={() => onCheckItem(item)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -13,7 +13,6 @@
   div {
     display: flex;
     gap: 0.5rem;
-    align-items: flex-end;
 
     .items-created-label {
       color: var(--blue);
@@ -22,7 +21,6 @@
       color: var(--purple);
     }
     .number-badge {
-      align-self: center;
       color: var(--gray-200);
       background-color: var(--gray-400);
       border-radius: 1rem;
@@ -35,4 +33,22 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+
+.empty-list-message {
+  display: flex;
+  flex-direction: column;
+  padding: 4rem 1.5rem;
+  gap: 1rem;
+  align-items: center;
+  border-top: 1px solid var(--gray-400);
+  color: var(--gray-300);
+  h3 {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  p {
+    font-weight: 400;
+    font-size: 1rem;
+  }
 }
