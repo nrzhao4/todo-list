@@ -5,18 +5,24 @@ import Item from '../item/Item.component';
 import './List.component.scss';
 
 type ListProps = {
-  items: ListItem[];
-  onDeleteItem: (deletedItem: ListItem) => void;
-  onCheckItem: (item: ListItem) => void;
+  itemsNotDone: ListItem[];
+  itemsDone: ListItem[];
+  onDeleteItemNotDone: (index: number) => void;
+  onDeleteItemDone: (index: number) => void;
+  onCheckItem: (index: number) => void;
+  onUncheckItem: (index: number) => void;
 };
 
 export default function Button({
-  items,
-  onDeleteItem,
+  itemsNotDone,
+  itemsDone,
+  onDeleteItemNotDone,
+  onDeleteItemDone,
   onCheckItem,
+  onUncheckItem,
 }: ListProps) {
-  const getNumberOfDoneItems = () => {
-    return items.filter((item) => item.isDone).length;
+  const getNumberOfTotalItems = () => {
+    return itemsDone.length + itemsNotDone.length;
   };
 
   return (
@@ -25,19 +31,19 @@ export default function Button({
         <div>
           <span className="items-created-label">Tarefas criadas</span>
           <div className="number-badge">
-            <span>{items.length}</span>
+            <span>{getNumberOfTotalItems()}</span>
           </div>
         </div>
         <div>
           <span className="concluded-label">Concluídas</span>
           <div className="number-badge">
             <span>
-              {getNumberOfDoneItems()} de {items.length}
+              {itemsDone.length} de {getNumberOfTotalItems()}
             </span>
           </div>
         </div>
       </div>
-      {items.length === 0 ? (
+      {getNumberOfTotalItems() === 0 ? (
         <div className="empty-list-message">
           <Clipboard />
           <h3>Você ainda não tem tarefas cadastradas</h3>
@@ -45,12 +51,22 @@ export default function Button({
         </div>
       ) : (
         <div className="list-items">
-          {items.map((item, index) => (
+          {itemsNotDone.map((item, index) => (
             <Item
               item={item}
+              isDone={false}
               key={index}
-              onClickDelete={() => onDeleteItem(item)}
-              onClickCheck={() => onCheckItem(item)}
+              onClickDelete={() => onDeleteItemNotDone(index)}
+              onClickCheck={() => onCheckItem(index)}
+            />
+          ))}
+          {itemsDone.map((item, index) => (
+            <Item
+              item={item}
+              isDone={true}
+              key={index}
+              onClickDelete={() => onDeleteItemDone(index)}
+              onClickCheck={() => onUncheckItem(index)}
             />
           ))}
         </div>

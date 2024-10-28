@@ -5,6 +5,7 @@ import './Item.component.scss';
 
 type ItemProps = {
   item: ListItem;
+  isDone: boolean;
   onClickDelete: () => void;
   onClickCheck: () => void;
 };
@@ -13,11 +14,12 @@ export default function Button({
   item,
   onClickDelete,
   onClickCheck,
+  isDone,
 }: ItemProps) {
   return (
     <div className="item">
-      <Checkbox isChecked={item.isDone} onClick={onClickCheck} />
-      <span className={item.isDone ? 'checked' : ''}>{item.value}</span>
+      <Checkbox isChecked={isDone} onClick={onClickCheck} />
+      <span className={isDone ? 'checked' : ''}>{item.value}</span>
       <DeleteIcon className="delete-icon" onClick={onClickDelete} />
     </div>
   );

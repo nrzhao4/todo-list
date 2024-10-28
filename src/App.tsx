@@ -7,52 +7,93 @@ import TextInput from './components/text-input/TextInput.component';
 import { ListItem } from './library/ListItem';
 
 export default function App() {
+  const ITEMS_NOT_DONE_KEY = 'todo-list-items-not-done';
+  const ITEMS_DONE_KEY = 'todo-list-items-done';
+
+  const initItemsNotDone = () => {
+    return localStorage.getItem(ITEMS_NOT_DONE_KEY)
+      ? JSON.parse(localStorage.getItem(ITEMS_NOT_DONE_KEY)!)
+      : [];
+  };
+
+  const initItemsDone = () => {
+    return localStorage.getItem(ITEMS_DONE_KEY)
+      ? JSON.parse(localStorage.getItem(ITEMS_DONE_KEY)!)
+      : [];
+  };
+
   const [inputValue, setInputValue] = useState('');
-  const [items, setItems] = useState<ListItem[]>([]);
+  const [itemsNotDone, setItemsNotDone] = useState<ListItem[]>(
+    initItemsNotDone()
+  );
+  const [itemsDone, setItemsDone] = useState<ListItem[]>(initItemsDone());
 
   const onClickCreate = () => {
     setInputValue('');
+    const currentItems = itemsNotDone;
     const newItem = {
       id: new Date().getTime(),
       value: inputValue,
       isDone: false,
     };
-    const newItemsArr = insertNewItem(newItem);
-    setItems(newItemsArr);
-  };
-
-  const insertNewItem = (newItem: ListItem) => {
-    const currentItems = items;
-    const insertIndex = currentItems.findIndex((item) => item.isDone);
-
-    if (insertIndex === -1) {
-      return [...currentItems, newItem];
-    }
-
-    return [
-      ...currentItems.slice(0, insertIndex),
-      newItem,
-      ...currentItems.slice(insertIndex),
-    ];
+    setItemsNotDone([...currentItems, newItem]);
+    saveItemsNotDoneToLocalStorage([...currentItems, newItem]);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
-  const deleteItem = (deletedItem: ListItem) => {
-    const newItems = items.filter((item) => item.id !== deletedItem.id);
-    setItems(newItems);
+  const deleteItemNotDone = (index: number) => {
+    setItemsNotDone((prevItemsNotDone) => {
+      const updatedItemsNotDone = [...prevItemsNotDone];
+      updatedItemsNotDone.splice(index, 1);
+      saveItemsNotDoneToLocalStorage(updatedItemsNotDone);
+      return updatedItemsNotDone;
+    });
   };
 
-  const checkItem = (checkedItem: ListItem) => {
-    const newItems = items.filter((item) => item.id !== checkedItem.id);
-    newItems.push({
-      id: checkedItem.id,
-      value: checkedItem.value,
-      isDone: !checkedItem.isDone,
+  const deleteItemDone = (index: number) => {
+    setItemsDone((prevItemsDone) => {
+      const updatedItemsDone = [...prevItemsDone];
+      updatedItemsDone.splice(index, 1);
+      saveItemsDoneToLocalStorage(updatedItemsDone);
+      return updatedItemsDone;
     });
-    setItems(newItems);
+  };
+
+  const checkItem = (index: number) => {
+    setItemsNotDone((prevItemsNotDone) => {
+      const updatedItemsNotDone = [...prevItemsNotDone];
+      const [itemToMove] = updatedItemsNotDone.splice(index, 1);
+      setItemsDone([...itemsDone, itemToMove]);
+
+      saveItemsNotDoneToLocalStorage(updatedItemsNotDone);
+      saveItemsDoneToLocalStorage([...itemsDone, itemToMove]);
+
+      return updatedItemsNotDone;
+    });
+  };
+
+  const unCheckItem = (index: number) => {
+    setItemsDone((prevItemsDone) => {
+      const updatedItemsDone = [...prevItemsDone];
+      const [itemToMove] = updatedItemsDone.splice(index, 1);
+      setItemsNotDone([...itemsNotDone, itemToMove]);
+
+      saveItemsNotDoneToLocalStorage([...itemsNotDone, itemToMove]);
+      saveItemsDoneToLocalStorage(updatedItemsDone);
+
+      return updatedItemsDone;
+    });
+  };
+
+  const saveItemsNotDoneToLocalStorage = (items: ListItem[]) => {
+    localStorage.setItem(ITEMS_NOT_DONE_KEY, JSON.stringify(items));
+  };
+
+  const saveItemsDoneToLocalStorage = (items: ListItem[]) => {
+    localStorage.setItem(ITEMS_DONE_KEY, JSON.stringify(items));
   };
 
   return (
@@ -74,9 +115,12 @@ export default function App() {
             />
           </div>
           <List
-            items={items}
-            onDeleteItem={deleteItem}
+            itemsNotDone={itemsNotDone}
+            itemsDone={itemsDone}
+            onDeleteItemNotDone={deleteItemNotDone}
+            onDeleteItemDone={deleteItemDone}
             onCheckItem={checkItem}
+            onUncheckItem={unCheckItem}
           />
         </div>
       </div>
